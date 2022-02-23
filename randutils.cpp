@@ -28,6 +28,3 @@ RandFloat::RandFloat() {
 float RandFloat::nextFloat() {
     return ((float)(rand()%MAX_RANGE))/MAX_RANGE;
 }
-
-
-// TODO: Fill in LFSR code 

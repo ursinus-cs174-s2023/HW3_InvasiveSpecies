@@ -15,8 +15,6 @@ class RandFloat {
         float x;
 };
 
-// TODO: Fill in LFSR code 
-
 
 
 #endif

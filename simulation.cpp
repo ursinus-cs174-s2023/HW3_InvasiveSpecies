@@ -7,9 +7,14 @@ using namespace std;
 using namespace tinygl;
 
 
-// Use the "pointer to implementation" design pattern for 
-// internal drawing details
-// https://en.cppreference.com/w/cpp/language/pimpl
+/**
+ * @brief This is a helper class to wrap around drawing functionality
+ * DO NOT TOUCH THIS CLASS
+ * 
+ * This code is using the "pointer to implementation" design pattern 
+ * to work in synchrony with the Simulation class
+ * https://en.cppreference.com/w/cpp/language/pimpl
+ */
 class SimulationCanvas: public Window {
     private:
         int res;
@@ -46,6 +51,10 @@ Simulation::Simulation(int res) {
     this->res = (float)res;
 }
 
+/**
+ * @brief Destroy the Simulation:: Simulation object
+ * 
+ */
 Simulation::~Simulation() {
     // TODO: Cleanup dynamically allocated stuff here
 }
@@ -72,6 +81,12 @@ void Simulation::circle(float x, float y, int r, int g, int b, float diameter) {
     canvas->circle(x, y, r, g, b, diameter);
 }
 
+/**
+ * @brief Do a step of the simulation.  Every animal should
+ * move and take its action
+ * 
+ * @param dt The amount of time elapsed since the last step
+ */
 void Simulation::step(float dt) {
     // TODO: You should loop through the animals here
     // and take steps and draw them

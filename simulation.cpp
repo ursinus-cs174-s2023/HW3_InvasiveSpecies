@@ -73,5 +73,7 @@ void Simulation::circle(float x, float y, int r, int g, int b, float diameter) {
 }
 
 void Simulation::step(float dt) {
+    // TODO: You should loop through the animals here
+    // and take steps and draw them
     circle(0.5, 0.5, 255, 0, 0, 0.01);
 }

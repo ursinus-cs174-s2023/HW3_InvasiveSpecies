@@ -1,54 +1,15 @@
 #include "simulation.h"
 #include "animal.h"
-#include <ws.h>
+#include "canvas.h"
 #include <list>
+#include <stdint.h>
 #include <iterator>
 #include <iostream>
-#include <chrono>
 #include <stdio.h>
 using namespace std;
 
-typedef std::chrono::high_resolution_clock Clock;
-
 ///////////////////////////////////////////////////////////////////////////
-/**
- * @brief This is a helper class to wrap around web drawing functionality
- *        and animation timing
- * DO NOT TOUCH THIS CLASS
- * 
- * This code is using the "pointer to implementation" design pattern 
- * to work in synchrony with the Simulation class
- * https://en.cppreference.com/w/cpp/language/pimpl
- */
-class SimulationCanvas {
-    private:
-        Simulation* simulation;
-        Clock::time_point lastTime;
-        struct ws_events evs;
-
-    public:
-        SimulationCanvas(Simulation* simulation) {
-            this->simulation = simulation;
-            lastTime = Clock::now();
-        }
-
-        void circle(float x, float y, int r, int g, int b, float diameter) {
-            // TODO: Fill this in
-        }
-
-        void draw() {
-            // TODO: Draw all objects by sending request
-            
-        }
-
-        float getElapsedTime() {
-            Clock::time_point now = Clock::now();
-            std::chrono::duration<float, std::milli> dt = now-lastTime;
-            lastTime = now;
-            return (float)(dt.count());
-        }
-};
-
+// DO NOT TOUCH THE CODE IN THIS BLOCK
 /**
  * @brief Start off a continuous animation loop
  * 
@@ -60,7 +21,7 @@ void Simulation::run() {
         // Step 2: Do a step of the simulation
         step(dt);
         // Step 3: Draw the results
-        canvas->draw();
+        canvas->draw(dt);
     }
 }
 
@@ -74,9 +35,12 @@ void Simulation::run() {
  * @param b Blue component in [0, 255]
  * @param diameter Diameter of dot, in [0, 1]
  */
-void Simulation::circle(float x, float y, int r, int g, int b, float diameter) {
+void Simulation::circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter) {
     canvas->circle(x, y, r, g, b, diameter);
 }
+///////////////////////////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 //                         BEGIN STUDENT CODE                            //
@@ -87,9 +51,10 @@ void Simulation::circle(float x, float y, int r, int g, int b, float diameter) {
 /**
  * @brief Construct a new simulation object
  * 
+ * @param port Port on which to connect to browser
  */
-Simulation::Simulation() {
-    canvas = new SimulationCanvas(this);
+Simulation::Simulation(int port) {
+    canvas = new SimulationCanvas(this, port);
 }
 
 /**
@@ -108,10 +73,8 @@ Simulation::~Simulation() {
  * @param dt The amount of time elapsed since the last step
  */
 void Simulation::step(float dt) {
-    cout << "dt = " << dt << "\n";
+    //cout << "dt = " << dt << "\n";
     // TODO: You should loop through the animals here
     // and take steps and draw them
     //circle(0.5, 0.5, 255, 0, 0, 0.01);
-
-    canvas->draw();
 }

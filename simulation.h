@@ -2,6 +2,7 @@
 #define SIMULATION_H
 
 #include <list>
+#include <stdint.h>
 
 using namespace std;
 
@@ -14,10 +15,10 @@ class Simulation {
         SimulationCanvas* canvas;
     
     public:
-        Simulation();
+        Simulation(int port);
         ~Simulation();
 
-        void circle(float x, float y, int r, int g, int b, float diameter);
+        void circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter);
         void step(float dt);
         void run();
 };

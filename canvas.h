@@ -21,15 +21,14 @@ typedef std::chrono::high_resolution_clock Clock;
  * to work in synchrony with the Simulation class
  * https://en.cppreference.com/w/cpp/language/pimpl
  */
-class SimulationCanvas {
+class WebCanvas {
     private:
-        Simulation* simulation;
         Clock::time_point lastTime;
         struct ws_events evs;
         stringstream shapes;
 
     public:
-        SimulationCanvas(Simulation* simulation, int port);
+        WebCanvas(int port);
 
         void circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter);
         void draw(float dt);

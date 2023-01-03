@@ -54,7 +54,7 @@ void Simulation::circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float
  * @param port Port on which to connect to browser
  */
 Simulation::Simulation(int port) {
-    canvas = new SimulationCanvas(this, port);
+    canvas = new WebCanvas(port);
 }
 
 /**

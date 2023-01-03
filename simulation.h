@@ -7,12 +7,12 @@
 using namespace std;
 
 class Animal;
-class SimulationCanvas;
+class WebCanvas;
 
 class Simulation {
     private:
         list<Animal*> animals;
-        SimulationCanvas* canvas;
+        WebCanvas* canvas;
     
     public:
         Simulation(int port);

@@ -1,5 +1,15 @@
+/**
+ * @file canvas.cpp
+ * @author Chris Tralie (ctralie@alumni.princeton.edu)
+ * @brief A file for sending drawing events to the browser
+ * @version 0.1
+ * @date 2023-01-03
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #include "canvas.h"
-#include "simulation.h"
 #include <ws.h>
 #include <stdint.h>
 #include <iostream>
@@ -9,10 +19,6 @@
 #include <stdio.h>
 using namespace std;
 
-
-///////////////////////////////////////////////////////////////////////////
-// DO NOT TOUCH THE CODE IN THIS BLOCK
-// IT IS FOR CONTROLLING DRAWING EVENTS TO THE BROWSER
 
 /**
  * @brief Called when a client connects to the server.
@@ -67,8 +73,15 @@ void onmessage(ws_cli_conn_t *client,
  * to work in synchrony with the Simulation class
  * https://en.cppreference.com/w/cpp/language/pimpl
  */
-SimulationCanvas::SimulationCanvas(Simulation* simulation, int port) {
-    this->simulation = simulation;
+
+
+
+/**
+ * @brief Construct a new Simulation Canvas:: Simulation Canvas object
+ * 
+ * @param port Port on which to connect
+ */
+WebCanvas::WebCanvas(int port) {
     lastTime = Clock::now();
     evs.onopen = &onopen;
     evs.onclose = &onclose;
@@ -77,11 +90,11 @@ SimulationCanvas::SimulationCanvas(Simulation* simulation, int port) {
 
 }
 
-void SimulationCanvas::circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter) {
+void WebCanvas::circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter) {
     
 }
 
-void SimulationCanvas::draw(float dt) {
+void WebCanvas::draw(float dt) {
     // TODO: Draw all objects by sending request
     cout << "dt = " << dt << "\n";
 }
@@ -92,7 +105,7 @@ void SimulationCanvas::draw(float dt) {
  * 
  * @return float Elapsed time
  */
-float SimulationCanvas::getElapsedTime() {
+float WebCanvas::getElapsedTime() {
     Clock::time_point now = Clock::now();
     std::chrono::duration<float, std::milli> dt = now-lastTime;
     lastTime = now;

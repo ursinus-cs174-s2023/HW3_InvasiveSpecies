@@ -3,13 +3,17 @@
 #include <ws.h>
 #include <list>
 #include <iterator>
+#include <iostream>
+#include <chrono>
 #include <stdio.h>
 using namespace std;
 
+typedef std::chrono::high_resolution_clock Clock;
 
 ///////////////////////////////////////////////////////////////////////////
 /**
  * @brief This is a helper class to wrap around web drawing functionality
+ *        and animation timing
  * DO NOT TOUCH THIS CLASS
  * 
  * This code is using the "pointer to implementation" design pattern 
@@ -19,12 +23,13 @@ using namespace std;
 class SimulationCanvas {
     private:
         Simulation* simulation;
-        float lastTime;
+        Clock::time_point lastTime;
         struct ws_events evs;
+
     public:
         SimulationCanvas(Simulation* simulation) {
             this->simulation = simulation;
-            lastTime = 0; // TODO: Update this
+            lastTime = Clock::now();
         }
 
         void circle(float x, float y, int r, int g, int b, float diameter) {
@@ -33,20 +38,30 @@ class SimulationCanvas {
 
         void draw() {
             // TODO: Draw all objects by sending request
+            
+        }
 
-            float time = lastTime + 0.01; // TODO: Update this
-            float dt = time - lastTime;
-            lastTime = time;
-            simulation->step(dt);
+        float getElapsedTime() {
+            Clock::time_point now = Clock::now();
+            std::chrono::duration<float, std::milli> dt = now-lastTime;
+            lastTime = now;
+            return (float)(dt.count());
         }
 };
 
 /**
- * @brief Start off a continuous animation by calling canvas's draw
+ * @brief Start off a continuous animation loop
  * 
  */
 void Simulation::run() {
-    canvas->draw();
+    while (true) {
+        // Step 1: Determine elapsed time
+        float dt = canvas->getElapsedTime();
+        // Step 2: Do a step of the simulation
+        step(dt);
+        // Step 3: Draw the results
+        canvas->draw();
+    }
 }
 
 /**
@@ -93,6 +108,7 @@ Simulation::~Simulation() {
  * @param dt The amount of time elapsed since the last step
  */
 void Simulation::step(float dt) {
+    cout << "dt = " << dt << "\n";
     // TODO: You should loop through the animals here
     // and take steps and draw them
     //circle(0.5, 0.5, 255, 0, 0, 0.01);

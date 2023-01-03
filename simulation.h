@@ -10,17 +10,11 @@ class SimulationCanvas;
 
 class Simulation {
     private:
-        float res;
         list<Animal*> animals;
         SimulationCanvas* canvas;
     
     public:
-        /**
-         * @brief Construct a new simulation object
-         * 
-         * @param res The square resolution of the window
-         */
-        Simulation(int res);
+        Simulation();
         ~Simulation();
 
         void circle(float x, float y, int r, int g, int b, float diameter);

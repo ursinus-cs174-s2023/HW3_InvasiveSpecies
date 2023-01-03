@@ -6,7 +6,7 @@ using namespace std;
 
 
 int main() {
-  Simulation simulation(800);
+  Simulation simulation;
   simulation.run();
   return 0;
 }

@@ -1,1 +1,0 @@
-Code wraps around <a href = "https://github.com/alinen/tinygl-cpp">tinygl-cpp</a>, courtesy of Aline Normoyle

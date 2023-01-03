@@ -18,7 +18,7 @@ class Simulation {
         Simulation(int port);
         ~Simulation();
 
-        void circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter);
+        void circle(float x, float y, float diameter, uint8_t r, uint8_t g, uint8_t b);
         void step(float dt);
         void run();
 };

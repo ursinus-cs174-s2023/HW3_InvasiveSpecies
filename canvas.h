@@ -16,10 +16,6 @@ typedef std::chrono::high_resolution_clock Clock;
 /**
  * @brief This is a helper class to wrap around web drawing functionality
  *        and animation timing
- * 
- * This code is using the "pointer to implementation" design pattern 
- * to work in synchrony with the Simulation class
- * https://en.cppreference.com/w/cpp/language/pimpl
  */
 class WebCanvas {
     private:
@@ -29,8 +25,7 @@ class WebCanvas {
 
     public:
         WebCanvas(int port);
-
-        void circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter);
+        void circle(float x, float y, float diameter, uint8_t r, uint8_t g, uint8_t b);
         void draw(float dt);
         float getElapsedTime();
 };

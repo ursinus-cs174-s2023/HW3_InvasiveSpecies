@@ -6,6 +6,7 @@
 #include <iterator>
 #include <iostream>
 #include <stdio.h>
+#include <math.h>
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -30,13 +31,13 @@ void Simulation::run() {
  * 
  * @param x Location of dot in [0, 1]
  * @param y Location of dot in [0, 1]
+ * @param diameter Diameter of dot, in [0, 1]
  * @param r Red component in [0, 255]
  * @param g Green component in [0, 255]
  * @param b Blue component in [0, 255]
- * @param diameter Diameter of dot, in [0, 1]
  */
-void Simulation::circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter) {
-    canvas->circle(x, y, r, g, b, diameter);
+void Simulation::circle(float x, float y, float diameter, uint8_t r, uint8_t g, uint8_t b) {
+    canvas->circle(x, y, diameter, r, g, b);
 }
 ///////////////////////////////////////////////////////////////////////////
 
@@ -76,5 +77,5 @@ void Simulation::step(float dt) {
     //cout << "dt = " << dt << "\n";
     // TODO: You should loop through the animals here
     // and take steps and draw them
-    //circle(0.5, 0.5, 255, 0, 0, 0.01);
+    circle(0.5, 0.5, 0.01, 255, 0, 0);
 }

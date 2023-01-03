@@ -15,9 +15,19 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <thread>
+#include <mutex>
 #include <chrono>
 #include <stdio.h>
 using namespace std;
+
+// GLOBAL VARIABLES FOR COORDINATING COMMUNICATIONS
+bool drawReady = false;
+mutex drawMutex;
+
+// GLOBAL VARIABLES FOR SHAPE TYPES
+const uint8_t CIRCLE = 0;
+const uint8_t SQUARE = 1;
 
 
 /**
@@ -62,25 +72,12 @@ void onclose(ws_cli_conn_t *client) {
  */
 void onmessage(ws_cli_conn_t *client,
 	const unsigned char *msg, uint64_t size, int type) {
-	cout << "Received message: " << msg << "\n";
+    drawMutex.lock();
+    drawReady = true;
+    drawMutex.unlock();
 }
 
-/**
- * @brief This is a helper class to wrap around web drawing functionality
- *        and animation timing
- * 
- * This code is using the "pointer to implementation" design pattern 
- * to work in synchrony with the Simulation class
- * https://en.cppreference.com/w/cpp/language/pimpl
- */
 
-
-
-/**
- * @brief Construct a new Simulation Canvas:: Simulation Canvas object
- * 
- * @param port Port on which to connect
- */
 WebCanvas::WebCanvas(int port) {
     lastTime = Clock::now();
     evs.onopen = &onopen;
@@ -90,13 +87,55 @@ WebCanvas::WebCanvas(int port) {
 
 }
 
-void WebCanvas::circle(float x, float y, uint8_t r, uint8_t g, uint8_t b, float diameter) {
-    
+/**
+ * @brief Write the 4 bytes of a float to a stringstream
+ * 
+ * @param ss String stream
+ * @param f Float
+ */
+void writeFloatBytes(stringstream& ss, float f) {
+    uint8_t* fptr = (uint8_t*)&f;
+    for (int i = 0; i < 4; i++) {
+        ss << fptr[i];
+    }
 }
 
+
+void WebCanvas::circle(float x, float y, float diameter, uint8_t r, uint8_t g, uint8_t b) {
+    shapes << CIRCLE;
+    shapes << r << g << b;
+    writeFloatBytes(shapes, x);
+    writeFloatBytes(shapes, y);
+    writeFloatBytes(shapes, diameter);
+}
+
+
 void WebCanvas::draw(float dt) {
-    // TODO: Draw all objects by sending request
-    cout << "dt = " << dt << "\n";
+    // Step 1: Block until ready to draw
+    while (true) {
+        drawMutex.lock();
+        if (!drawReady) {
+            drawMutex.unlock();
+            this_thread::sleep_for(chrono::milliseconds(5));
+        }
+        else {
+            drawMutex.unlock();
+            break;
+        }
+    }
+    
+
+    // Step 1: Send over shapes to browser
+    string s = shapes.str();
+
+    ws_sendframe_bin(NULL, s.c_str(), s.length());
+
+    shapes.clear();
+    shapes.str("");
+
+    drawMutex.lock();
+    drawReady = false;
+    drawMutex.unlock();
 }
 
 /**
@@ -109,5 +148,5 @@ float WebCanvas::getElapsedTime() {
     Clock::time_point now = Clock::now();
     std::chrono::duration<float, std::milli> dt = now-lastTime;
     lastTime = now;
-    return (float)(dt.count());
+    return (float)(dt.count())/1000.0;
 }

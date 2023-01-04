@@ -148,5 +148,9 @@ float WebCanvas::getElapsedTime() {
     Clock::time_point now = Clock::now();
     std::chrono::duration<float, std::milli> dt = now-lastTime;
     lastTime = now;
-    return (float)(dt.count())/1000.0;
+    float ret = (float)(dt.count())/1000.0;
+    if (ret > 0.2) {
+        ret = 0.2; // Bottom out at 5fps
+    }
+    return ret;
 }

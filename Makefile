@@ -10,7 +10,10 @@ all: $(LIB) driver
 $(LIB):
 	@$(MAKE) all -C $(WSDIR)/
 
-animal.o: animal.h animal.cpp
+randutils.o: randutils.h randutils.cpp $(LIB)
+	$(CC) $(CFLAGS) -c randutils.cpp
+
+animal.o: animal.h animal.cpp randutils.h
 	$(CC) $(CFLAGS) -c animal.cpp
 
 simulation.o: simulation.h animal.h simulation.cpp $(LIB)
@@ -19,8 +22,8 @@ simulation.o: simulation.h animal.h simulation.cpp $(LIB)
 canvas.o: canvas.h simulation.h canvas.cpp $(LIB)
 	$(CC) $(CFLAGS) -c canvas.cpp
 
-driver: animal.o simulation.o canvas.o $(LIB)
-	$(CC) $(CFLAGS) $(LDFLAGS) driver.cpp animal.o simulation.o canvas.o -o driver $(LIB)
+driver: randutils.o animal.o simulation.o canvas.o $(LIB)
+	$(CC) $(CFLAGS) $(LDFLAGS) driver.cpp randutils.o animal.o simulation.o canvas.o -o driver $(LIB)
 
 # Clean
 clean:

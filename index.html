@@ -2,13 +2,70 @@
 <head>
 	<script src="d3.min.js"></script>
 	<script src="main.js"></script>
+	<style>
+		button {
+			outline: none;
+			background-color: #bfbfbf;
+			border: 2px solid #000;
+			color: #000;
+			padding: 5px 10px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 6px;
+			cursor: pointer;
+			border-radius: 10px;
+		}
+
+		button:hover {
+			opacity: 0.6;
+		}
+	</style>
 </head>
 
 <body>
-	<div height="100%" id="canvas" style="border: 1;"></div>
+	<table>
+		<tr>
+			<td>
+				<h3>Address</h3>
+			</td>
+			<td>
+				<h3>Port</h3>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" id="address">
+			</td>
+			<td>
+				<input type="text" id="port">
+			</td>
+			<td>
+				<button type="button" onclick="connect()">Connect!</button> 
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3"><div id="log"></div></td>
+		</tr>
+	</table>
+	<div height="100%" id="canvas" style="border: 1px solid #000000;"></div>
+
 	<script>
+		const addressInput = document.getElementById("address");
+		address.value = "nimbus.ursinus.edu";
+		const portInput = document.getElementById("port");
+		portInput.value = "8080";
 		let canvas = new NetCanvas();
-		canvas.connect("ws://127.0.0.1:8080");
+
+		function connect() {
+			let addr = "ws://" + addressInput.value + ":" + portInput.value;
+			console.log(addr);
+			canvas.connect(addr);
+		}
+
+		
+		
 	</script>
 
 </body>

@@ -74,8 +74,9 @@ Simulation::~Simulation() {
  * @param dt The amount of time elapsed since the last step
  */
 void Simulation::step(float dt) {
-    //cout << "dt = " << dt << "\n";
     // TODO: You should loop through the animals here
-    // and take steps and draw them
+    // and take steps and draw them.  The two calls below
+    // are just examples
     circle(0.5, 0.5, 0.01, 255, 0, 0);
+    circle(0.95, 0.5, 0.01, 0, 0, 0);
 }
